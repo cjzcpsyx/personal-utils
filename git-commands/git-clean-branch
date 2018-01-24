@@ -15,11 +15,11 @@ if [ $# == 0 ] || [ $# == 1 ]
 then
   echo "${Blue}Fetching latest remote branch info${NC}"
   git fetch -p
-  Gone_Branchs=$(git branch -vv | grep ': gone]')
+  Gone_Branchs=$(git branch -vv | grep -i --color=always '\[.*: gone\]')
   if [ "$1" == '--delete' ]
   then
     echo "${Red}Deleting branches${NC}"
-    # $Gone_Branchs | awk '{print $1}' | xargs git branch -D
+    echo "${Gone_Branchs}" | awk '{print $1}' | xargs git branch -D
     echo "${Blue}Done!${NC}"
   else
     if [ "$Gone_Branchs" == '' ]
@@ -27,7 +27,7 @@ then
       echo "${Blue}No gone branches :)${NC}"
     else
       echo "${Red}The following branchs are not tracked by remote${NC}"
-      $Gone_Branchs
+      echo "${Gone_Branchs}"
       echo "${Blue}Use${NC} ${Green}git clean-branch --delete${NC} ${Blue}to delete the untracked branches${NC}"
     fi
   fi
